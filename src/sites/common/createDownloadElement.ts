@@ -56,6 +56,9 @@ const onDownloadClicked = async (item: Element, downloadPageSelector: ElementSel
     }
     if (!url) return
     const response = await chrome.runtime.sendMessage({event: eventName, url})
+    if (response.status === 'error')
+        alert(response.message)
+    console.debug(response)
 }
 
 const setupItem = (item: Element, {downloadElementSelector, elementCreator, downloadPageSelector, downloadEventName}: Omit<ICreateDownloadElement, 'itemSelector' | 'itemContainerSelector'>) => {
