@@ -54,13 +54,12 @@ const onDownloadClicked = async (item: Element, downloadPageSelector: ElementSel
     if (url.startsWith('/')) {
         url = location.origin + url
     }
-    console.log(url)
-    // const response = await chrome.runtime.sendMessage({event: eventName, url})
-    console.log(response)
+    if (!url) return
+    const response = await chrome.runtime.sendMessage({event: eventName, url})
 }
 
 const setupItem = (item: Element, {downloadElementSelector, elementCreator, downloadPageSelector, downloadEventName}: Omit<ICreateDownloadElement, 'itemSelector' | 'itemContainerSelector'>) => {
-    console.debug('injecting')
+    if (!getSelector(item, downloadPageSelector)) return
     injectDownloadElement(item, downloadElementSelector, elementCreator, onDownloadClicked.bind(null, item, downloadPageSelector, downloadEventName))
 }
 
@@ -76,11 +75,16 @@ const destroyItem = (item: Element) => {
     item.querySelector('.downloader-btn')?.remove()
 }
 
+let containerErrorTimeout: any
+
 export function createDownloadElement({itemSelector, itemContainerSelector, ...elementDetails}: ICreateDownloadElement) {
     stopObservingPage()
+    clearTimeout(containerErrorTimeout)
     const itemContainer = getSelector(document as unknown as Element, itemContainerSelector)
     if (!itemContainer) {
-        console.error('Failed to a container with items. It is possible that site has changed its layout. Please submit a PR to github repository if you believe thats the case.')
+        containerErrorTimeout = setTimeout(() => {
+            console.error('Failed to a container with items. It is possible that site has changed its layout. Please submit a PR to github repository if you believe thats the case.')
+        }, 10000)
         return
     }
     const intersectionCallback = (items: IntersectionObserverEntry[]) => {
