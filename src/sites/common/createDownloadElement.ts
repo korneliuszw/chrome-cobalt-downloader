@@ -5,7 +5,7 @@ type ElementSelector<T = Element> = string | ((element: T) => Element | null)
 export type DownloadNodeCreatorFunction = ((item: Element, container: Element, downloadHandler: (ev: MouseEvent) => void) => void)
 
 interface ICreateDownloadElement {
-    itemSelector: ElementSelector<Element>
+    itemSelector: string
     downloadElementSelector: ElementSelector<Element>
     downloadEventName: string
     elementCreator: string | DownloadNodeCreatorFunction
