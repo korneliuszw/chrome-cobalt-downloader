@@ -18,5 +18,8 @@
       "matches": ["https://x.com/*"],
       "js": ["src/sites/twitter/contentScript.ts"]
     }
+  ],
+  "permissions": [
+    "downloads"
   ]
 }

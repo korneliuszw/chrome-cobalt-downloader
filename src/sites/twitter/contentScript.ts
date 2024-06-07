@@ -6,8 +6,8 @@ let observer = new MutationObserver(() => {
         itemSelector: 'article:has([data-testid=videoPlayer])',
         downloadElementSelector: '[role=group]',
         elementCreator: '<div>download</div>',
-        downloadEventName: 'twitter-download-new',
-        downloadPageSelector: '[data-testid="User-Name"] > div:nth-of-type(2) > div > div:nth-of-type(3) a[role=link]'
+        downloadEventName: 'cobalt-download',
+        downloadPageSelector: 'a[role=link][href*=status]'
     })
 })
 observer.observe(document.body, {

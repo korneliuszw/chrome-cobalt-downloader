@@ -43,19 +43,25 @@ const injectDownloadElement = (item: Element, selector: ElementSelector, element
         elementCreator(item, element, downloadHandler)
     }
 }
-const onDownloadClicked = (item: Element, downloadPageSelector: ElementSelector, _event: MouseEvent) => {
+const onDownloadClicked = async (item: Element, downloadPageSelector: ElementSelector, eventName: string, event: MouseEvent) => {
+    event.stopPropagation()
     const selector = getSelector(item, downloadPageSelector)
     if (!selector) {
         console.error('Failed to find URL of item to download. It is possible that site has changed its layout. Please submit a PR to github repository if you believe thats the case.')
         return
     }
-    const url = selector.getAttribute('href')!
+    let url = selector.getAttribute('href')!
+    if (url.startsWith('/')) {
+        url = location.origin + url
+    }
     console.log(url)
+    // const response = await chrome.runtime.sendMessage({event: eventName, url})
+    console.log(response)
 }
 
 const setupItem = (item: Element, {downloadElementSelector, elementCreator, downloadPageSelector, downloadEventName}: Omit<ICreateDownloadElement, 'itemSelector' | 'itemContainerSelector'>) => {
     console.debug('injecting')
-    injectDownloadElement(item, downloadElementSelector, elementCreator, onDownloadClicked.bind(null, item, downloadPageSelector))
+    injectDownloadElement(item, downloadElementSelector, elementCreator, onDownloadClicked.bind(null, item, downloadPageSelector, downloadEventName))
 }
 
 let pageObserver: MutationObserver
