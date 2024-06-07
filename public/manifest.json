@@ -17,6 +17,10 @@
     {
       "matches": ["https://x.com/*"],
       "js": ["src/sites/twitter/contentScript.ts"]
+    },
+    {
+      "matches": ["https://www.youtube.com/shorts/*"],
+      "js": ["src/sites/youtube/shorts/contentScript.ts"]
     }
   ],
   "permissions": [

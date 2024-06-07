@@ -62,7 +62,6 @@ const onDownloadClicked = async (item: Element, downloadPageSelector: ElementSel
 }
 
 const setupItem = (item: Element, {downloadElementSelector, elementCreator, downloadPageSelector, downloadEventName}: Omit<ICreateDownloadElement, 'itemSelector' | 'itemContainerSelector'>) => {
-    if (!getSelector(item, downloadPageSelector)) return
     injectDownloadElement(item, downloadElementSelector, elementCreator, onDownloadClicked.bind(null, item, downloadPageSelector, downloadEventName))
 }
 
@@ -91,6 +90,7 @@ export function createDownloadElement({itemSelector, itemContainerSelector, ...e
         return
     }
     const intersectionCallback = (items: IntersectionObserverEntry[]) => {
+        console.log(items)
         for (const visibleItem of items) {
             if (visibleItem.isIntersecting ) {
                 setupItem(visibleItem.target, elementDetails)
@@ -103,7 +103,9 @@ export function createDownloadElement({itemSelector, itemContainerSelector, ...e
     const mutationCallback = () => {
         // there's no point keeping track as most sites uses infinite lists, let observer mechanism handle duplicates and GC
         // this might change however when i come across site which doesn't use infinite lists
+        console.log(itemContainer.querySelectorAll(itemSelector))
         itemContainer.querySelectorAll(itemSelector).forEach(item => intersectionObserver.observe(item))
+        intersectionCallback(intersectionObserver.takeRecords())
     } 
     pageObserver = new MutationObserver(mutationCallback)
     pageObserver.observe(itemContainer, {
