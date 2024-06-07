@@ -11,10 +11,7 @@
     "128": "icons/icon_128.png"
   },
   "background": {
-    "service_worker": "src/background.ts"
-  },
-  "chrome_url_overrides": {
-    "newtab": "index.html"
+    "service_worker": "src/downloader/background.ts"
   },
   "content_scripts": [
     {
